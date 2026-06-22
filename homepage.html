@@ -6,8 +6,6 @@
     <title>Dashboard Sistem Informasi Kepegawaian</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:,">
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden h-screen flex">
 
@@ -19,76 +17,60 @@
                         <i class="fa-solid fa-users-gear text-lg"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-white tracking-wide text-sm leading-tight">SIMPEG APP</h1>
-                        <span class="text-xs text-indigo-400 font-medium">v1.0.0 Pro</span>
+                        <h1 class="font-bold text-white tracking-wide text-sm">SIMPEG Master</h1>
+                        <p class="text-xs text-slate-500">v1.0-Operator</p>
                     </div>
                 </div>
                 <button id="close-sidebar" class="md:hidden text-slate-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <nav class="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-160px)] custom-scrollbar">
-                <a href="#" onclick="loadPage('welcome')" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition font-medium text-sm border border-transparent hover:border-slate-700/50">
-                    <i class="fa-solid fa-chart-pie text-base w-5"></i>
-                    <span>Dashboard Utama</span>
+            <nav class="p-4 space-y-1.5 flex-1 overflow-y-auto">
+                <a href="#" onclick="window.loadPage('welcome')" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-slate-800 text-white font-medium transition shadow-sm">
+                    <i class="fa-solid fa-chart-pie text-indigo-400 w-5"></i>
+                    <span class="text-sm">Dashboard Utama</span>
                 </a>
 
-                <div>
-                    <button onclick="toggleDropdown('dropdown-pegawai', 'arrow-pegawai')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition font-medium text-sm border border-transparent hover:border-slate-700/50">
+                <div class="space-y-1">
+                    <button onclick="window.toggleDropdown('dropdown-pegawai', 'arrow-pegawai')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-slate-800/60 hover:text-white transition text-left group">
                         <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-folder-open text-base w-5"></i>
-                            <span>Master Data</span>
+                            <i class="fa-solid fa-folder-tree text-slate-400 group-hover:text-indigo-400 w-5 transition"></i>
+                            <span class="text-sm font-medium">Manajemen Data</span>
                         </div>
-                        <i id="arrow-pegawai" class="fa-solid fa-chevron-right text-xs transition-transform duration-200"></i>
+                        <i id="arrow-pegawai" class="fa-solid fa-chevron-right text-xs text-slate-500 transition-transform duration-200"></i>
                     </button>
-                    <div id="dropdown-pegawai" class="hidden pl-11 pr-2 py-1 space-y-1 bg-slate-950/40 rounded-xl mt-1">
-                        <a href="#" onclick="loadPage('homepage/html/pegawai.html')" class="block px-3 py-2 text-xs rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800/40 transition font-medium">
-                            <i class="fa-solid fa-circle-user mr-2 text-[8px]"></i> Data Master Pegawai
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <button onclick="toggleDropdown('dropdown-cuti', 'arrow-cuti')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition font-medium text-sm border border-transparent hover:border-slate-700/50">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-solid fa-calendar-check text-base w-5"></i>
-                            <span>Cuti & Absensi</span>
-                        </div>
-                        <i id="arrow-cuti" class="fa-solid fa-chevron-right text-xs transition-transform duration-200"></i>
-                    </button>
-                    <div id="dropdown-cuti" class="hidden pl-11 pr-2 py-1 space-y-1 bg-slate-950/40 rounded-xl mt-1">
-                        <a href="#" class="block px-3 py-2 text-xs rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800/40 transition font-medium">
-                            <i class="fa-solid fa-circle mr-2 text-[8px]"></i> Pengajuan Cuti
-                        </a>
+                    <div id="dropdown-pegawai" class="hidden pl-11 pr-2 py-1 space-y-1 bg-slate-950/40 rounded-xl">
+                        <a href="#" onclick="window.loadPage('pegawai.html')" class="block py-2 px-3 text-xs rounded-lg hover:text-white hover:bg-slate-800 transition">Data Master Pegawai</a>
                     </div>
                 </div>
             </nav>
         </div>
 
-        <div class="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between">
-            <div class="flex items-center space-x-3 truncate">
-                <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-between text-white font-bold text-center justify-center border border-slate-600">
-                    <i class="fa-solid fa-user text-sm m-auto"></i>
+        <div class="p-4 border-t border-slate-800 bg-slate-950/50">
+            <div class="flex items-center space-x-3 mb-4 px-2">
+                <div class="w-9 h-9 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold text-sm border border-indigo-500/30">
+                    <i class="fa-solid fa-user-shield"></i>
                 </div>
-                <div class="truncate leading-tight">
-                    <h4 id="user-email" class="text-xs font-semibold text-white truncate">Memuat...</h4>
-                    <span class="text-[10px] text-slate-500 font-medium tracking-wide uppercase">Operator</span>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-semibold text-white truncate" id="user-email">Memuat...</p>
+                    <p class="text-[10px] text-slate-500">Operator Sistem</p>
                 </div>
             </div>
-            <button id="btn-logout" class="text-slate-500 hover:text-rose-400 transition ml-2" title="Keluar Aplikasi">
-                <i class="fa-solid fa-power-off text-base"></i>
+            <button id="btn-logout" class="w-full flex items-center justify-center space-x-2 bg-red-600/10 hover:bg-red-600 border border-red-500/20 hover:border-red-600 text-red-400 hover:text-white py-2.5 px-4 rounded-xl transition duration-200 text-sm font-medium shadow-sm">
+                <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                <span>Keluar Sistem</span>
             </button>
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col h-full overflow-hidden">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 z-10 shadow-xs">
             <div class="flex items-center space-x-4">
-                <button id="toggle-sidebar" class="text-slate-600 hover:text-slate-900 focus:outline-hidden p-2 rounded-lg hover:bg-slate-100 transition">
-                    <i class="fa-solid fa-bars text-xl"></i>
+                <button id="toggle-sidebar" class="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
-                <h2 id="page-title" class="text-base font-bold text-slate-800 tracking-tight">Dashboard Utama</h2>
+                <h2 id="page-title" class="text-lg font-bold text-slate-800 tracking-tight">Dashboard Utama</h2>
             </div>
             <div id="current-time" class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full hidden sm:block">
                 Memuat Waktu...
@@ -102,7 +84,7 @@
                         <i class="fa-solid fa-hands-clapping"></i>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Selamat Datang di Portal SIMPEG</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed mb-6">Gunakan menu navigasi di bilah kiri (Sidebar) untuk mulai mengelola database Master Pegawai atau melihat status pengajuan cuti secara terintegrasi.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-6">Gunakan menu navigasi di bilah kiri (Sidebar) untuk mulai mengelola database Master Pegawai.</p>
                 </div>
             </div>
 
@@ -110,10 +92,16 @@
         </main>
     </div>
 
-    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-20 hidden transition-opacity duration-300 md:hidden"></div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-20 hidden"></div>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Konfigurasi Klien Supabase Global (Harus SAMA dengan yang ada di index.html)
+        const SUPABASE_URL = "https://amvqyeiypfzgjwriuuwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtdnF5ZWl5cGZ6Z2p3cml1dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTQ0MTcsImV4cCI6MjA5NzY3MDQxN30.Ndq52QI8hOrbttGMk1bBGFHGmLmXhB6v5iddfc0_-oM";
+
+        window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
+    <script src="app.js"></script>
 </body>
 </html>
