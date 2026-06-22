@@ -42,7 +42,8 @@
         const SUPABASE_URL = "https://amvqyeiypfzgjwriuuwl.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtdnF5ZWl5cGZ6Z2p3cml1dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTQ0MTcsImV4cCI6MjA5NzY3MDQxN30.Ndq52QI8hOrbttGMk1bBGFHGmLmXhB6v5iddfc0_-oM";
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // MENG MENGUBAH NAMA VARIABEL MENJADI 'supabaseClient' AGAR TIDAK BENTROK
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
@@ -59,7 +60,8 @@
             const passwordValue = document.getElementById('password').value;
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                // Diperbarui menggunakan supabaseClient
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: emailValue,
                     password: passwordValue,
                 });
@@ -81,13 +83,11 @@
             }
         });
 
-        // Jika sudah login sebelumnya, otomatis langsung lempar ke homepage
+        // Diperbarui menggunakan supabaseClient
         window.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 window.location.href = "homepage.html";
             }
         });
     </script>
-</body>
-</html>
