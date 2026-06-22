@@ -15,7 +15,7 @@
             <p class="text-slate-500 text-sm mt-1">Silakan masuk ke akun operator Anda</p>
         </div>
 
-        <div id="errorAlert" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm" role="alert">
+        <div id="errorAlert" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm">
             <span id="errorMessage" class="block sm:inline"></span>
         </div>
 
@@ -38,40 +38,20 @@
     </div>
 
     <script>
-        // =================================================================
-        // 1. KONFIGURASI SUPABASE (GANTI DENGAN MILIK PROYEK ANDA)
-        // =================================================================
-        const SUPABASE_URL = "https://amvqyeiypfzgjwriuuwl.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtdnF5ZWl5cGZ6Z2p3cml1dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTQ0MTcsImV4cCI6MjA5NzY3MDQxN30.Ndq52QI8hOrbttGMk1bBGFHGmLmXhB6v5iddfc0_-oM";
+        // === PENGATURAN SUPABASE (GANTI DENGAN URL & KEY PROYEK ANDA) ===
+        const SUPABASE_URL = "https://XYZ_MASUKKAN_URL_SUPABASE_ANDA.supabase.co";
+        const SUPABASE_ANON_KEY = "MASUKKAN_ANON_KEY_SUPABASE_ANDA";
 
-        // Inisialisasi Klien Supabase
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Ambil elemen HTML yang dibutuhkan
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
         const errorAlert = document.getElementById('errorAlert');
         const errorMessage = document.getElementById('errorMessage');
 
-        // Fungsi Tampilkan Error
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorAlert.classList.remove('hidden');
-        }
-
-        // Fungsi Sembunyikan Error
-        function hideError() {
-            errorAlert.classList.add('hidden');
-        }
-
-        // =================================================================
-        // 2. PROSES AUTENTIKASI LOGIN
-        // =================================================================
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Mencegah reload halaman otomatis
-            hideError();
-
-            // Ubah tombol menjadi mode loading
+            e.preventDefault();
+            errorAlert.classList.add('hidden');
             btnLogin.disabled = true;
             btnLogin.innerText = "Memverifikasi...";
 
@@ -79,32 +59,29 @@
             const passwordValue = document.getElementById('password').value;
 
             try {
-                // Panggil fungsi login bawaan Supabase Auth
                 const { data, error } = await supabase.auth.signInWithPassword({
                     email: emailValue,
                     password: passwordValue,
                 });
 
                 if (error) {
-                    // Jika ditolak oleh Supabase (Email/Password salah)
-                    showError("Gagal Masuk: " + error.message);
+                    errorMessage.textContent = "Gagal Masuk: " + error.message;
+                    errorAlert.classList.remove('hidden');
                     btnLogin.disabled = false;
                     btnLogin.innerText = "Masuk Aplikasi";
                 } else if (data.user) {
-                    // JIKA BERHASIL LOGIN -> Alihkan ke homepage.html secara aman (Jalur Relatif)
                     btnLogin.innerText = "Membuka Beranda...";
                     window.location.href = "homepage.html";
                 }
             } catch (err) {
-                // Jika ada kendala jaringan/salah memasukkan URL Supabase
-                showError("Kesalahan Sistem: Pastikan URL & Anon Key Supabase Anda sudah benar.");
+                errorMessage.textContent = "Kesalahan Sistem: Hubungan ke Supabase gagal.";
+                errorAlert.classList.remove('hidden');
                 btnLogin.disabled = false;
                 btnLogin.innerText = "Masuk Aplikasi";
-                console.error(err);
             }
         });
 
-        // Cek otomatis: Jika user sudah login sebelumnya, langsung lempar ke homepage
+        // Jika sudah login sebelumnya, otomatis langsung lempar ke homepage
         window.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
