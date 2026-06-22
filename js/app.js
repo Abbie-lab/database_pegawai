@@ -8,16 +8,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pageTitle = document.getElementById("page-title");
     const currentTimeText = document.getElementById("current-time");
 
-    // 1. CEK AUTENTIKASI LOGIN USER
+    // 1. VERIFIKASI SEAMLESS LOGIN USER
     const { data: { session }, error } = await window.supabaseClient.auth.getSession();
     if (error || !session) {
-        // Jika tidak ada sesi login, paksa kembali ke halaman login utama (index.html)
+        // Jika tidak valid/belum login, paksa kembali ke login form
         window.location.href = "index.html";
         return;
     }
+    // Masukkan email aktif operator ke sidebar
     userEmailText.textContent = session.user.email;
 
-    // 2. JAM DIGITAL NAVBAR REALTIME
+    // 2. JAM DIGITAL NAVBAR INDONESIA REALTIME
     setInterval(() => {
         const now = new Date();
         currentTimeText.textContent = now.toLocaleDateString('id-ID', {
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }) + " | " + now.toLocaleTimeString('id-ID');
     }, 1000);
 
-    // 3. LOGIKA INTERAKSI SIDEBAR (OPEN/CLOSE/OVERLAY)
+    // 3. EVENT LISTENER AKSI SIDEBAR RESPONSIVE MOBILE
     function openSidebar() {
         sidebar.classList.remove("-translate-x-full");
         overlay.classList.remove("hidden");
@@ -36,26 +37,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         overlay.classList.add("hidden");
     }
 
-    toggleBtn.addEventListener("click", () => {
-        if (sidebar.classList.contains("-translate-x-full")) {
-            openSidebar();
-        } else {
-            closeSidebar();
-        }
-    });
-    closeBtn.addEventListener("click", closeSidebar);
-    overlay.addEventListener("click", closeSidebar);
+    if (toggleBtn) toggleBtn.addEventListener("click", openSidebar);
+    if (closeBtn) closeBtn.addEventListener("click", closeSidebar);
+    if (overlay) overlay.addEventListener("click", closeSidebar);
 
-    // 4. FITUR LOGOUT AMAN
-    btnLogout.addEventListener("click", async () => {
-        if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
-            await window.supabaseClient.auth.signOut();
-            window.location.href = "index.html";
-        }
-    });
+    // 4. LOGOUT EVENT
+    if (btnLogout) {
+        btnLogout.addEventListener("click", async () => {
+            if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+                await window.supabaseClient.auth.signOut();
+                window.location.href = "index.html";
+            }
+        });
+    }
 });
 
-// 5. GLOBAL FUNCTION LOAD IFRAME
+// 5. GLOBAL FUNCTION - NAVIGASI FRAME KONTEN
 window.loadPage = function(url) {
     const welcomeView = document.getElementById("welcome-view");
     const contentFrame = document.getElementById("content-frame");
@@ -70,18 +67,17 @@ window.loadPage = function(url) {
         contentFrame.classList.remove("hidden");
         contentFrame.src = url;
         
-        // Atur Judul berdasarkan URL halaman
         if(url.includes('pegawai')) pageTitle.textContent = "Data Master Pegawai";
     }
     
-    // Otomatis tutup sidebar di perangkat seluler setelah klik menu
+    // Sembunyikan otomatis jika sedang di device mobile setelah memilih menu
     if (window.innerWidth < 768) {
         document.getElementById("sidebar").classList.add("-translate-x-full");
         document.getElementById("sidebar-overlay").classList.add("hidden");
     }
 }
 
-// 6. GLOBAL FUNCTION TOGGLE MENU DROPDOWN SIDEBAR
+// 6. GLOBAL FUNCTION - ACCORDION DROPDOWN SIDEBAR
 window.toggleDropdown = function(dropdownId, arrowId) {
     const dropdown = document.getElementById(dropdownId);
     const arrow = document.getElementById(arrowId);
