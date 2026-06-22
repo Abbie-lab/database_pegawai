@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Master Pegawai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-slate-900 px-4">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">Sistem Kepegawaian</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Email</label>
+                    <input type="email" id="login-email" required class="mt-1 w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Password</label>
+                    <input type="password" id="login-password" required class="mt-1 w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition">Masuk Aplikasi</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="hidden min-h-screen flex flex-col">
+        <nav class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
+            <h1 class="text-xl font-bold tracking-wide">Data Master Pegawai</h1>
+            <div class="flex items-center gap-4">
+                <span id="user-display" class="text-sm bg-slate-700 px-3 py-1 rounded-md text-slate-300"></span>
+                <button id="btn-logout" class="bg-red-500 hover:bg-red-600 px-4 py-1.5 rounded-lg text-sm font-medium transition">Keluar</button>
+            </div>
+        </nav>
+
+        <main class="flex-1 p-6 max-w-7xl w-full mx-auto space-y-8">
+            
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 id="form-title" class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Tambah Pegawai Baru</h3>
+                <form id="pegawai-form" class="space-y-6">
+                    <input type="hidden" id="id_peg">
+
+                    <div>
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">1. Identitas Pribadi</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">NIK *</label><input type="text" id="nik" required class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Nama Lengkap *</label><input type="text" id="nama" required class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Tempat Lahir</label><input type="text" id="tempat_lahir" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Tanggal Lahir</label><input type="date" id="tanggal_lahir" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500">Jenis Kelamin</label>
+                                <select id="jenis_kelamin" class="mt-1 w-full p-2 border rounded-md text-sm">
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div><label class="text-xs font-semibold text-slate-500">Agama</label><input type="text" id="agama" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">No. HP</label><input type="text" id="no_hp" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Email</label><input type="email" id="email" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div class="md:col-span-4"><label class="text-xs font-semibold text-slate-500">Alamat Lengkap</label><textarea id="alamat_lengkap" rows="2" class="mt-1 w-full p-2 border rounded-md text-sm"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">2. Kepegawaian & Jabatan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">NIP</label><input type="text" id="nip" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Status Pegawai</label><input type="text" id="status_pegawai" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Kelompok Tenaga</label><input type="text" id="kelompok_tenaga" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Golongan / Pangkat</label><input type="text" id="golongan_pangkat" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT Pangkat</label><input type="date" id="tmt_pangkat" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT Pangkat Berikutnya</label><input type="date" id="tmt_pangkat_berikutnya" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Kelompok Jabatan</label><input type="text" id="kelompok_jabatan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Jabatan</label><input type="text" id="jabatan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT Masuk</label><input type="date" id="tmt_masuk" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Masa Kerja</label><input type="text" id="masa_kerja" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT CPNS</label><input type="date" id="tmt_cpns" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Rentang BUP</label><input type="text" id="rentang_bup" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT Pensiun</label><input type="date" id="tmt_pensiun" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Ruangan</label><input type="text" id="ruangan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Jabatan Ruangan</label><input type="text" id="jabatan_ruangan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Atasan Langsung</label><input type="text" id="atasan_langsung" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Verifikator</label><input type="text" id="verifikator" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Shift Kerja</label><input type="text" id="shift_kerja" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT</label><input type="date" id="tmt" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">3. Hubungan Keluarga</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">No. Kartu Keluarga</label><input type="text" id="no_kartu_keluarga" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Status Pernikahan</label><input type="text" id="status_pernikahan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Nama Pasangan</label><input type="text" id="pasangan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Jumlah Anak</label><input type="number" id="jumlah_anak" value="0" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Anak Ke-1</label><input type="text" id="anak1" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Anak Ke-2</label><input type="text" id="anak2" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Anak Ke-3</label><input type="text" id="anak3" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">4. Pendidikan & Jaminan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">Jenjang Pendidikan</label><input type="text" id="jenjang_pendidikan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Fakultas</label><input type="text" id="fakultas" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Jurusan</label><input type="text" id="jurusan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Asal Pendidikan</label><input type="text" id="asal_pendidik" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Tahun Lulus</label><input type="number" id="tahun_lulus" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">BPJS Kesehatan</label><input type="text" id="bpjskesehatan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">BPJS TK Taspen</label><input type="text" id="bpjstktaspen" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">NPWP</label><input type="text" id="npwp" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">5. Cuti & Kontak Darurat</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">Total Cuti</label><input type="number" id="total_cuti" value="0" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Cuti Diambil</label><input type="number" id="cuti_diambil" value="0" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Sisa Cuti</label><input type="number" id="sisa_cuti" value="0" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Nama Kerabat</label><input type="text" id="nama_kerabat" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Hubungan Keluarga</label><input type="text" id="hubungankeluarga" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">No. HP Kerabat</label><input type="text" id="no_hp_kerabat" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h4 class="font-bold text-blue-600 mb-3 text-sm tracking-wider uppercase">6. Sertifikasi (SIPSIK/STR) & Pelatihan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs font-semibold text-slate-500">No. SIPSIK</label><input type="text" id="no_sipsik" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT SIPSIK</label><input type="date" id="tmt_sipsik" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Masa Berlaku SIPSIK</label><input type="date" id="masaberlakusipsik" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">No. STR</label><input type="text" id="no_str" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">TMT STR</label><input type="date" id="tmt_str" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Masa Berlaku STR</label><input type="date" id="masaberlakustr" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Pelatihan Wajib</label><input type="text" id="pelatihanwajib" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Tgl Pelatihan</label><input type="date" id="tglpelatihan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">Tgl Akhir Pelatihan</label><input type="date" id="tglakhirpelatihan" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                            <div><label class="text-xs font-semibold text-slate-500">JPL (Jam Pelatihan)</label><input type="number" id="jpl" value="0" class="mt-1 w-full p-2 border rounded-md text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t">
+                        <button type="button" id="btn-batal" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition hidden">Batal Edit</button>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition">Simpan Data Pegawai</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="text-lg font-bold text-slate-800">Daftar Anggota Pegawai</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="bg-slate-100 border-b border-slate-200 text-slate-600 font-semibold">
+                            <tr>
+                                <th class="p-4">NIK</th>
+                                <th class="p-4">Nama Lengkap</th>
+                                <th class="p-4">NIP</th>
+                                <th class="p-4">Jabatan & Ruangan</th>
+                                <th class="p-4 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pegawai-table-body" class="divide-y divide-slate-100 text-slate-700">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
