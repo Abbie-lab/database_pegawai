@@ -21,8 +21,8 @@ const fields = [
     'no_str', 'tmt_str', 'masaberlakustr', 'pelatihanwajib', 'tglpelatihan', 'tglakhirpelatihan', 'jpl'
 ];
 
-// 1. MONITOR STATUS SELESAI AUTH LOGIN USER
-supabase.auth.onAuthStateChange((event, session) => {
+// 1. MONITOR STATUS SELESAI AUTH LOGIN USER (Menggunakan supabaseClient)
+supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
         loginScreen.classList.add('hidden');
         dashboardScreen.classList.remove('hidden');
@@ -40,20 +40,20 @@ loginForm.addEventListener('submit', async (e) => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) alert('Gagal Masuk: ' + error.message);
 });
 
 // 3. LOGIKA TOMBOL LOGOUT
 btnLogout.addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
 });
 
 // 4. BACA DATA (READ ALL PEGAWAI)
 async function fetchPegawai() {
     pegawaiTableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Memuat data pegawai...</td></tr>`;
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('master_pegawai')
         .select('*')
         .order('id_peg', { ascending: false });
@@ -86,7 +86,7 @@ async function fetchPegawai() {
             </td>
         `;
         pegawaiTableBody.appendChild(tr);
-        window[`peg_obj_${p.id_peg}`] = p; // Menyimpan data di window secara dinamis
+        window[`peg_obj_${p.id_peg}`] = p; 
     });
 }
 
@@ -110,7 +110,7 @@ pegawaiForm.addEventListener('submit', async (e) => {
 
     if (idPeg) {
         // Eksekusi UPDATE
-        const { error } = await supabase.from('master_pegawai').update(payload).eq('id_peg', idPeg);
+        const { error } = await supabaseClient.from('master_pegawai').update(payload).eq('id_peg', idPeg);
         if (error) alert('Gagal memperbarui data: ' + error.message);
         else {
             alert('Sukses memperbarui data pegawai!');
@@ -118,7 +118,7 @@ pegawaiForm.addEventListener('submit', async (e) => {
         }
     } else {
         // Eksekusi INSERT (Create)
-        const { error } = await supabase.from('master_pegawai').insert([payload]);
+        const { error } = await supabaseClient.from('master_pegawai').insert([payload]);
         if (error) alert('Gagal menyimpan data baru: ' + error.message);
         else {
             alert('Sukses mendaftarkan pegawai baru!');
@@ -141,7 +141,7 @@ function editPegawai(id) {
         const input = document.getElementById(f);
         if (input) {
             if (input.type === 'date' && data[f]) {
-                input.value = data[f].split('T')[0]; // Format penyesuaian kalender HTML
+                input.value = data[f].split('T')[0]; 
             } else {
                 input.value = data[f] !== null ? data[f] : '';
             }
@@ -153,7 +153,7 @@ function editPegawai(id) {
 // 7. HAPUS DATA (DELETE)
 async function hapusPegawai(id) {
     if (confirm('Apakah Anda yakin ingin menghapus data pegawai ini?')) {
-        const { error } = await supabase.from('master_pegawai').delete().eq('id_peg', id);
+        const { error } = await supabaseClient.from('master_pegawai').delete().eq('id_peg', id);
         if (error) alert('Gagal menghapus: ' + error.message);
         else {
             alert('Data pegawai berhasil dihapus.');
