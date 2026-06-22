@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Database Master Pegawai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-800">Sistem Informasi Pegawai</h2>
+            <p class="text-slate-500 text-sm mt-1">Silakan masuk ke akun operator Anda</p>
+        </div>
+
+        <div id="errorAlert" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm" role="alert">
+            <span id="errorMessage" class="block sm:inline"></span>
+        </div>
+
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                <input type="email" id="email" required placeholder="operator@email.com"
+                    class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                <input type="password" id="password" required placeholder="••••••••"
+                    class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            </div>
+            <button type="submit" id="btnLogin"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 text-sm">
+                Masuk Aplikasi
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // =================================================================
+        // 1. KONFIGURASI SUPABASE (GANTI DENGAN MILIK PROYEK ANDA)
+        // =================================================================
+        const SUPABASE_URL = "https://amvqyeiypfzgjwriuuwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtdnF5ZWl5cGZ6Z2p3cml1dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwOTQ0MTcsImV4cCI6MjA5NzY3MDQxN30.Ndq52QI8hOrbttGMk1bBGFHGmLmXhB6v5iddfc0_-oM";
+
+        // Inisialisasi Klien Supabase
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Ambil elemen HTML yang dibutuhkan
+        const loginForm = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+        const errorAlert = document.getElementById('errorAlert');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Fungsi Tampilkan Error
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.classList.remove('hidden');
+        }
+
+        // Fungsi Sembunyikan Error
+        function hideError() {
+            errorAlert.classList.add('hidden');
+        }
+
+        // =================================================================
+        // 2. PROSES AUTENTIKASI LOGIN
+        // =================================================================
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mencegah reload halaman otomatis
+            hideError();
+
+            // Ubah tombol menjadi mode loading
+            btnLogin.disabled = true;
+            btnLogin.innerText = "Memverifikasi...";
+
+            const emailValue = document.getElementById('email').value.trim();
+            const passwordValue = document.getElementById('password').value;
+
+            try {
+                // Panggil fungsi login bawaan Supabase Auth
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: emailValue,
+                    password: passwordValue,
+                });
+
+                if (error) {
+                    // Jika ditolak oleh Supabase (Email/Password salah)
+                    showError("Gagal Masuk: " + error.message);
+                    btnLogin.disabled = false;
+                    btnLogin.innerText = "Masuk Aplikasi";
+                } else if (data.user) {
+                    // JIKA BERHASIL LOGIN -> Alihkan ke homepage.html secara aman (Jalur Relatif)
+                    btnLogin.innerText = "Membuka Beranda...";
+                    window.location.href = "homepage.html";
+                }
+            } catch (err) {
+                // Jika ada kendala jaringan/salah memasukkan URL Supabase
+                showError("Kesalahan Sistem: Pastikan URL & Anon Key Supabase Anda sudah benar.");
+                btnLogin.disabled = false;
+                btnLogin.innerText = "Masuk Aplikasi";
+                console.error(err);
+            }
+        });
+
+        // Cek otomatis: Jika user sudah login sebelumnya, langsung lempar ke homepage
+        window.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                window.location.href = "homepage.html";
+            }
+        });
+    </script>
+</body>
+</html>
