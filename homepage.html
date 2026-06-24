@@ -41,7 +41,7 @@
                         <i id="arrow-pegawai" class="fa-solid fa-chevron-right text-xs text-slate-500 transition-transform duration-200"></i>
                     </button>
                     <div id="dropdown-pegawai" class="hidden pl-11 pr-2 py-1 space-y-1 bg-slate-950/40 rounded-xl">
-                        <a href="#" onclick="window.loadPage('pegawai.html')" class="block py-2 px-3 text-xs rounded-lg hover:text-white hover:bg-slate-800 transition">Data Master Pegawai</a>
+                        <a href="#" onclick="window.loadPage('homepage/html/pegawai.html')" class="block py-2 px-3 text-xs rounded-lg hover:text-white hover:bg-slate-800 transition">Data Master Pegawai</a>
                     </div>
                 </div>
             </nav>
@@ -61,9 +61,6 @@
                 <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
                 <span>Keluar Sistem</span>
             </button>
-            <a href="#" id="btn-logout" class="...">
-    <i class="fa-solid fa-right-from-bracket mr-2"></i> Keluar Sistem
-</a>
         </div>
     </aside>
 
@@ -90,17 +87,14 @@
                     <p class="text-sm text-slate-500 leading-relaxed mb-6">Gunakan menu navigasi di bilah kiri (Sidebar) untuk mulai mengelola database Master Pegawai.</p>
                 </div>
             </div>
-
             <iframe id="content-frame" class="w-full h-full border-none hidden relative z-20"></iframe>
         </main>
     </div>
 
     <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-20 hidden"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
-    
-    <script src="app.js"></script>
+    <script src="js/app.js"></script> 
 </body>
 </html>
