@@ -42,13 +42,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (overlay) overlay.addEventListener("click", closeSidebar);
 
     // 4. LOGOUT EVENT
-    if (btnLogout) {
-        btnLogout.addEventListener("click", async () => {
-            if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
-                await window.supabaseClient.auth.signOut();
-                window.location.href = "index.html";
-            }
-        });
+   btnLogout.addEventListener("click", async () => { 
+    if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+        // Pastikan menggunakan window.supabaseClient
+        await window.supabaseClient.auth.signOut(); 
+        window.location.href = "index.html";
     }
 });
 
